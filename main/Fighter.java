@@ -29,9 +29,9 @@ public class Fighter {
     }
 
     public void BasicAttack(Fighter target) {
-        target.hp -= attack;
-        if (target.hp < 0) {
-            target.hp = 0;
+            target.hp -= getAttack();
+            if (target.hp < 0) {
+                target.hp = 0;
         }
     }
 
@@ -39,8 +39,8 @@ public class Fighter {
         if (target.hp <= 0){
             JOptionPane.showMessageDialog(
                 null,
-                "Musuh sudah kalah",
-                "Battle result",
+                "YOU WIN!",
+                "Victory",
                 JOptionPane.INFORMATION_MESSAGE
             );
         }

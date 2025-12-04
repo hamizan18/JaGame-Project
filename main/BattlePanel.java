@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class BattlePanel {
     JFrame frame;
+    int lastHit = 0;
 
     JButton atkBtn = new JButton("Attack");
     JButton healBtn = new JButton("Heal");
@@ -28,20 +29,34 @@ public class BattlePanel {
         JLabel hpLabel1 = new JLabel("HP: " + hero1.getHp(), SwingConstants.CENTER);
         JLabel hpLabel2 = new JLabel("HP: " + enemy1.getHp(), SwingConstants.CENTER);
 
+        hpPanel.setBackground(new Color(0, 180, 235));
         hpPanel.add(hpLabel1);
         hpPanel.add(hpLabel2);
+        atkBtn.setFont(new Font("Verdana", Font.BOLD, 18));
+        healBtn.setFont(new Font("Verdana", Font.BOLD, 18));
+
+        btnPanel.setFont(new Font("Arial", Font.BOLD, 14));
 
         atkBtn.addActionListener(e -> {
-            hero1.BasicAttack(enemy1);
-            enemy1.BasicAttack(hero1);
+            if (lastHit == 0) {
+                if (hero1.getHp() <= 0 || enemy1.getHp() <= 0) {
+                    lastHit = 1;
+                }
+                hero1.BasicAttack(enemy1);
+            }
+            if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
             hpLabel2.setText("HP: " + enemy1.getHp());
             hpLabel1.setText("HP: " + hero1.getHp());
             hero1.checker(enemy1);
         });
 
         healBtn.addActionListener(e -> {
-            hero1.Healing(hero1);
-            enemy1.BasicAttack(hero1);
+            if (lastHit == 0) {
+                if (hero1.getHp() <= 0 || enemy1.getHp() <= 0) {
+                    hero1.Healing(hero1);
+                }
+            }
+            if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
             hpLabel1.setText("HP: " + hero1.getHp());
         });
 
