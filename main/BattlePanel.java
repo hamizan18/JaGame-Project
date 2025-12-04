@@ -33,12 +33,15 @@ public class BattlePanel {
 
         atkBtn.addActionListener(e -> {
             hero1.BasicAttack(enemy1);
+            enemy1.BasicAttack(hero1);
             hpLabel2.setText("HP: " + enemy1.getHp());
+            hpLabel1.setText("HP: " + hero1.getHp());
             hero1.checker(enemy1);
         });
 
         healBtn.addActionListener(e -> {
             hero1.Healing(hero1);
+            enemy1.BasicAttack(hero1);
             hpLabel1.setText("HP: " + hero1.getHp());
         });
 
