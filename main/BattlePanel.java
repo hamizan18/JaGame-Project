@@ -4,6 +4,9 @@ import java.awt.*;
 public class BattlePanel {
     JFrame frame;
     int lastHit = 0;
+    ImagePanel image = new ImagePanel();
+    Direction WASD;
+    boolean canShoot = true;
 
     JButton atkBtn = new JButton("Attack");
     JButton healBtn = new JButton("Heal");
@@ -14,16 +17,19 @@ public class BattlePanel {
 
     public BattlePanel() {
         frame = new JFrame("Mijan no Windowsu");
-        atkBtn = new JButton("Attack");
+        atkBtn = new JButton("Shoot");
         healBtn = new JButton("Heal");
         btnPanel = new JPanel();
         hpPanel = new JPanel();
-
+        WASD = new Direction(image, frame);
+        
+        image.startTimer();
         final int[] hp = {hero1.getHp(), enemy1.getHp()};
 
         frame.setSize(1200, 800);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        frame.add(image, BorderLayout.CENTER);
 
         hpPanel.setLayout(new GridLayout(1, 2));
         JLabel hpLabel1 = new JLabel("HP: " + hero1.getHp(), SwingConstants.CENTER);
@@ -42,9 +48,13 @@ public class BattlePanel {
                 if (hero1.getHp() <= 0 || enemy1.getHp() <= 0) {
                     lastHit = 1;
                 }
-                hero1.BasicAttack(enemy1);
+                Bullet b = new Bullet(image.getXpos() + 80, image.getYpos() + 40);
+                image.addBullet(b);
+                canShoot = false;
+
+                new Timer(1000, ev -> canShoot = true).start();
             }
-            if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
+            // if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
             hpLabel2.setText("HP: " + enemy1.getHp());
             hpLabel1.setText("HP: " + hero1.getHp());
             hero1.checker(enemy1);
@@ -56,7 +66,7 @@ public class BattlePanel {
                     hero1.Healing(hero1);
                 }
             }
-            if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
+            // if (enemy1.getHp() > 0) enemy1.BasicAttack(hero1);
             hpLabel1.setText("HP: " + hero1.getHp());
         });
 
@@ -67,6 +77,8 @@ public class BattlePanel {
 
         btnPanel.add(atkBtn);
         btnPanel.add(healBtn);
+
+        WASD.setupKeybinds();
 
         frame.setVisible(true);
     }
